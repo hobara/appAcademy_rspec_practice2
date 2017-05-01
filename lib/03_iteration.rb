@@ -4,6 +4,7 @@
 # factors of a given number.
 
 def factors(num)
+  (1..num).to_a.select { |number| num % number == 0 }
 end
 
 # ### Bubble Sort
@@ -47,10 +48,36 @@ end
 
 class Array
   def bubble_sort!
+    return self if self.empty? || self.length == 1
+    condition = false
+    while condition == false
+      condition = true
+      i = 0
+      while i < self.length - 1
+        if block_given?
+          operator = yield(self[i], self[i+1])
+          if operator > 0
+            self[i], self[i+1] = self[i+1], self[i]
+            condition = false
+          end
+        else
+          if self[i] > self[i+1]
+            self[i], self[i+1] = self[i+1], self[i]
+            condition = false
+          end
+        end
+        i += 1
+      end
+      i = 0
+    end
+    self
   end
 
   def bubble_sort(&prc)
+    @array = self.dup
+    @array.bubble_sort!
   end
+
 end
 
 # ### Substrings and Subwords
@@ -67,9 +94,22 @@ end
 # words).
 
 def substrings(string)
+  substr = []
+  i = 0
+  while i < string.length
+    (i...string.length).each do |j|
+      substr << string[i..j]
+    end
+    i += 1
+  end
+  substr
 end
 
 def subwords(word, dictionary)
+  # subword = []
+  # dictionary.each { |w| subword << w if word.include?(w) }
+  # subword
+  dictionary.select { |w| substrings(word).include?(w) }
 end
 
 # ### Doubler
@@ -77,6 +117,7 @@ end
 # array with the original elements multiplied by two.
 
 def doubler(array)
+  array.map { |el| el * 2 }
 end
 
 # ### My Each
@@ -104,6 +145,12 @@ end
 
 class Array
   def my_each(&prc)
+    i = 0
+    while i < self.length
+      yield self[i]
+      i += 1
+    end
+    self
   end
 end
 
@@ -122,12 +169,27 @@ end
 
 class Array
   def my_map(&prc)
+    new_array = []
+    self.my_each do |element|
+      new_array << yield(element)
+    end
+    new_array
   end
 
   def my_select(&prc)
+    new_array = []
+    self.my_each do |element|
+      new_array << element if yield(element)
+    end
+    new_array
   end
 
   def my_inject(&blk)
+    acc ||= self[0]
+    self[1..-1].my_each do |element|
+      acc = yield(acc, element)
+    end
+    acc
   end
 end
 
@@ -141,4 +203,5 @@ end
 # ```
 
 def concatenate(strings)
+  strings.inject(:+)
 end

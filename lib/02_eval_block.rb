@@ -1,3 +1,12 @@
+
+def eval_block(*arg)
+  if block_given?
+    yield(*arg)
+  else
+    raise "NO BLOCK GIVEN"
+  end
+end
+
 # ### `eval_block`
 #
 # Write an `eval_block` method that takes some arguments and a block. It should
