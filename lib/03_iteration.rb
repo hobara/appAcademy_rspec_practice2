@@ -106,9 +106,6 @@ def substrings(string)
 end
 
 def subwords(word, dictionary)
-  # subword = []
-  # dictionary.each { |w| subword << w if word.include?(w) }
-  # subword
   dictionary.select { |w| substrings(word).include?(w) }
 end
 

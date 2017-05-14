@@ -7,7 +7,5 @@ def adder(value = 1)
 end
 
 def repeater(count = 1)
-  count.times do
-    yield
-  end
+  count.times { yield }
 end
